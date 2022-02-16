@@ -21,7 +21,7 @@
       <a href="#" class="active"><span>Accueil</span></a>
       <a href="#"><span>Détails de l'évènement</span></a>
       <a href="#"><span>À propos</span></a>
-      <a href="#"><span>Contact</span></a>
+      <a href="#"><span class="contact">Contact</span></a>
       <a href="#"><span>Évènements passés</span></a>
       <a href="javascript:void(0);" class="icon" onclick="editNav()">
         <i class="fa fa-bars"></i>
@@ -52,65 +52,77 @@
         </button>
       </div>
 
-      <div class="bground">
-        <div class="content">
+      <div class="bground" id="modal-bg">
+        <div class="content" id="modal-window">
           <span class="close close-modal-btn"></span>
           <div class="modal-body">
             <form
               name="reserve"
               action="index.html"
               method="get"
-              onsubmit="return validate();"
+              onsubmit="return validate(e);"
             >
               <div
                 class="formData">
-                <label>Prénom</label><br>
+                <label>Prénom<abbr title="Ce champ est obligatoire">*</abbr></label><br>
                 <input
                   class="text-control"
                   type="text"
                   id="first"
                   name="first"
                   minlength="2"
+                  required
                 /><br>
-              </div>
+              </div>  
+              <span class="error success" id="errorFirst">* Votre prénom doit contenir 2 caractères minimum et aucun caractère spéciaux</span>     
               <div
                 class="formData">
-                <label>Nom</label><br>
+                <label>Nom<abbr title="Ce champ est obligatoire">*</abbr></label><br>
                 <input
                   class="text-control"
                   type="text"
                   id="last"
                   name="last"
+                  required
                 /><br>
               </div>
+              <span class="error success" id="errorLast">* Votre nom doit contenir 2 caractères minimum et aucun caractère spéciaux</span>
               <div
                 class="formData">
-                <label>E-mail</label><br>
+                <label>E-mail<abbr title="Ce champ est obligatoire">*</abbr></label><br>
                 <input
                   class="text-control"
                   type="email"
                   id="email"
                   name="email"
+                  required
                 /><br>
               </div>
+              <span class="error success" id="errorMail">* Veuillez saisir une adresse e-mail valide</span>
               <div
                 class="formData">
-                <label>Date de naissance</label><br>
+                <label>Date de naissance<abbr title="Ce champ est obligatoire">*</abbr></label><br>
                 <input
                   class="text-control"
                   type="date"
                   id="birthdate"
                   name="birthdate"
+                  min="1910-01-01"
+                  max="2020-01-01"
+                  required
+                  
                 /><br>
               </div>
+              <span class="error success" id="errorBirthday">* Veuillez renseigner votre date de naissance</span>
               <div
                 class="formData">
-                <label>À combien de tournois GameOn avez-vous déjà participé ?</label><br>
-                <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
+                <label>À combien de tournois GameOn avez-vous déjà participé ?<abbr title="Ce champ est obligatoire">*</abbr></label><br>
+                <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99" required>
               </div>
-              <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?</p>
+              <span class="error success" id="errorQuantityCity">* Le nombre de participation doit être compris entre 0 et 99</span>
+              <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?<abbr title="Ce champ est obligatoire">*</abbr></p>
               <div
-                class="formData">
+                class="formData formRadio">
                 <input
                   class="checkbox-input"
                   type="radio"
@@ -178,6 +190,7 @@
                   Portland</label
                 >
               </div>
+              <span class="error success" id="errorLocation">* Veuillez choisir une ville</span>
 
               <div
                 class="formData">
@@ -186,10 +199,11 @@
                   type="checkbox"
                   id="checkbox1"
                   checked
+                  required
                 />
-                <label class="checkbox2-label" for="checkbox1" required>
+                <label class="checkbox2-label" for="checkbox1">
                   <span class="checkbox-icon"></span>
-                  J'ai lu et accepté les conditions d'utilisation.
+                  J'ai lu et accepté les conditions d'utilisation.<abbr title="Ce champ est obligatoire">*</abbr>
                 </label>
                 <br>
                 <input class="checkbox-input" type="checkbox" id="checkbox2" />

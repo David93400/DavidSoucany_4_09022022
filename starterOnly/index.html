@@ -57,6 +57,7 @@
           <span class="close close-modal-btn"></span>
           <div class="modal-body">
             <form
+              id="form"
               name="reserve"
               action="index.html"
               method="get"
@@ -71,7 +72,6 @@
                   id="first"
                   name="first"
                   minlength="2"
-                  required
                 /><br>
               </div>  
               <span class="error success" id="errorFirst">* Votre prénom doit contenir 2 caractères minimum et aucun caractère spéciaux</span>     
@@ -83,7 +83,6 @@
                   type="text"
                   id="last"
                   name="last"
-                  required
                 /><br>
               </div>
               <span class="error success" id="errorLast">* Votre nom doit contenir 2 caractères minimum et aucun caractère spéciaux</span>
@@ -195,16 +194,17 @@
               <div
                 class="formData">
                 <input
+                  name="checkbox1"
                   class="checkbox-input"
                   type="checkbox"
                   id="checkbox1"
-                  checked
                   required
                 />
-                <label class="checkbox2-label" for="checkbox1">
+                <label id="checkboxCGU" class="checkbox2-label" for="checkbox1">
                   <span class="checkbox-icon"></span>
                   J'ai lu et accepté les conditions d'utilisation.<abbr title="Ce champ est obligatoire">*</abbr>
                 </label>
+                <span class="error success" id="errorCGU"><br>* Vous devez accepter les CGU</span>
                 <br>
                 <input class="checkbox-input" type="checkbox" id="checkbox2" />
                 <label class="checkbox2-label" for="checkbox2">
@@ -220,6 +220,15 @@
                 value="C'est parti"
               />
             </form>
+            <div id="validation" class="success">
+              <div class="logoValidation">
+                <img src="./Logo.png" alt="logo" />
+              </div>
+              <span class="thanksText">Merci d'avoir complété ton inscription sur GameOn !! <br><br>A très bientot !</span>
+              <div class="thanksImg">
+                <img src="./thanks.jpg" alt="thanksImg">
+              </div>
+            </div>
           </div>
         </div>
       </div>

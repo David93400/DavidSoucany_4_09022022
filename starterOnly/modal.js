@@ -15,6 +15,7 @@ const modalWindow = document.getElementById('modal-window');
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formRadio = document.querySelector(".formRadio");
+const CGUForm = document.getElementById('checkboxCGU');
 const modalClose = document.querySelector(".close-modal-btn");
 const submit = document.querySelector(".btn-submit");
 
@@ -23,7 +24,8 @@ const lastName = document.getElementById('last');
 const email = document.getElementById('email');
 const birthday = document.getElementById('birthdate');
 const quantityCity = document.getElementById('quantity');
-
+const form = document.getElementById('form');
+const validation = document.getElementById('validation');
 
 const prenomError = document.querySelector('#errorFirst');
 const nomError = document.querySelector('#errorLast');
@@ -31,6 +33,7 @@ const mailError = document.querySelector('#errorMail');
 const birthdayError = document.querySelector('#errorBirthday');
 const quantityCityError = document.querySelector('#errorQuantityCity');
 const locationError = document.querySelector('#errorLocation');
+const CGUError = document.querySelector('#errorCGU');
 
 // Regex
 
@@ -53,6 +56,8 @@ function launchModal() {
 // close modal function
 function closeModal() {
   modalbg.style.display = "none";
+  form.classList.remove('success');
+  validation.classList.add('success');
 }
 
 // Close modal when clicking outside modal window
@@ -76,19 +81,30 @@ const validateField = (regex, field, fieldError, long=0) => {
   if (regex.test(field.value) && field.value.length >= long) {
     displaySuccess(field, fieldError)
     return true;
-  } displayError(field, fieldError)
-    return false;
+  } 
+  displayError(field, fieldError)
+  return false;
 }
 
 const validateRadio = (fieldError) => {
   const checkedRadio = document.querySelector("input[name='location']:checked");
-  if (checkedRadio !== null) {
+  if (checkedRadio) {
     fieldError.classList.add('success');
-    return true
-  } fieldError.classList.remove('success');
-    return false
+    return true;
+  } 
+  fieldError.classList.remove('success');
+  return false
 };
 
+const validateCheckbox = (fieldError) => {
+  const CGU = document.querySelector('#checkbox1');
+  if (CGU.checked) {
+    fieldError.classList.add('success');
+    return true;
+  } 
+  fieldError.classList.remove('success');
+  return false;
+};
 
 firstName.addEventListener("focusout", function(){validateField(regexName, firstName, prenomError, 2)})
 lastName.addEventListener("focusout", function(){validateField(regexName, lastName, nomError, 2)})
@@ -97,22 +113,22 @@ birthday.addEventListener("focusout", function(){validateField(regexDate, birthd
 quantityCity.addEventListener("focusout", function(){validateField(regexNumber, quantityCity, quantityCityError)})
 formRadio.addEventListener("click", function(){validateRadio(locationError)})
 submit.addEventListener("click", function(){validateRadio(locationError)})
+CGUForm.addEventListener('click', function(){validateCheckbox(CGUError);});
+submit.addEventListener("click", function(){validateCheckbox(CGUError)})
 
 
 submit.addEventListener("click", function(e) {
-  
+  e.preventDefault();
   if (
     validateField(regexName, firstName, prenomError, 2) &&
     validateField(regexName, lastName, nomError, 2) &&
     validateField(regexMail, email, mailError) &&
     validateField(regexDate, birthday, birthdayError) &&
     validateField(regexNumber, quantityCity, quantityCityError) &&
-    validateRadio(locationError)
+    validateRadio(locationError) &&
+    validateCheckbox(CGUError)
   ) {
-    alert('success');
-    e.preventDefault();
+    form.classList.add('success')
+    validation.classList.remove('success')
   } 
-    e.preventDefault();
-   
-  
 })

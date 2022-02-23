@@ -41,6 +41,31 @@ img {
   padding-right: 1rem;
 }
 
+.logoValidation {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+.thanksImg img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  padding: 0;
+  object-fit: cover;
+}
+
+.thanksText {
+  margin: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.closeThanks {
+  margin: 20px;
+}
+
 .topnav {
   display: flex;
   justify-content: space-between;

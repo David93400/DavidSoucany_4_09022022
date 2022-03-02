@@ -18,6 +18,9 @@ const formRadio = document.querySelector(".formRadio");
 const CGUForm = document.getElementById('checkboxCGU');
 const modalClose = document.querySelector(".close-modal-btn");
 const submit = document.querySelector(".btn-submit");
+const spanError = document.querySelectorAll('.error');
+const inputField = document.querySelectorAll('input')
+const cguLabel = document.querySelector('#checkboxCGU');
 
 const firstName = document.getElementById('first');
 const lastName = document.getElementById('last');
@@ -52,9 +55,18 @@ modalClose.addEventListener("click", closeModal);
 // launch modal function
 function launchModal() {
   modalbg.style.display = "block";
+  // setTimeout(resetValidation(spanError, 500))
 }
 // close modal function
 function closeModal() {
+  inputField.forEach(function (input) {
+    input.classList.remove('valid','invalid');
+  });
+  spanError.forEach(function(span) {
+    span.classList.add('success')
+  })
+  CGU = false
+  document.getElementById('form').reset()
   modalbg.style.display = "none";
   form.classList.remove('success');
   validation.classList.add('success');
@@ -80,30 +92,71 @@ const validateField = (regex, field, fieldError, long=0) => {
   
   if (regex.test(field.value) && field.value.length >= long) {
     displaySuccess(field, fieldError)
-    return true;
+    return true
   } 
   displayError(field, fieldError)
-  return false;
+  return false
 }
 
 const validateRadio = (fieldError) => {
   const checkedRadio = document.querySelector("input[name='location']:checked");
   if (checkedRadio) {
     fieldError.classList.add('success');
-    return true;
+    return true
   } 
   fieldError.classList.remove('success');
   return false
 };
 
+
+let CGU = false;
+cguLabel.addEventListener('click', function () {
+  CGU = !CGU;
+});
+
 const validateCheckbox = (fieldError) => {
-  const CGU = document.querySelector('#checkbox1');
-  if (CGU.checked) {
+  if (CGU === true) {
     fieldError.classList.add('success');
-    return true;
+    return true
   } 
   fieldError.classList.remove('success');
-  return false;
+  return false
+};
+
+const getInput = () => {
+  const firstName = document.getElementById('first').value;
+  const lastName = document.getElementById('last').value;
+  const email = document.getElementById('email').value;
+  const birthday = document.getElementById('birthdate').value;
+  const quantityCity = document.getElementById('quantity').value;
+  const radio = document.querySelector("input[name='location']:checked");
+  const cgu = document.querySelector('#checkbox1').checked;
+  return { firstName, lastName, email, birthday, quantityCity, radio, cgu };
+};
+
+const checkForm = (formInput) => {
+  const isValid = {};
+  Object.entries(formInput).map((input) => {
+    const key = input[0]
+    if (key === 'firstName')
+      isValid[key] = validateField(regexName, firstName, prenomError, 2);
+    if (key === 'lastName')
+      isValid[key] = validateField(regexName, lastName, nomError, 2);
+    if (key === 'email')
+      isValid[key] = validateField(regexMail, email, mailError);
+    if (key === 'birthday')
+      isValid[key] = validateField(regexDate, birthday, birthdayError);
+    if (key === 'quantityCity')
+      isValid[key] = validateField(
+        regexNumber,
+        quantityCity,
+        quantityCityError
+      );
+    if (key === 'radio') isValid[key] = validateRadio(locationError);
+    if (key === 'cgu') isValid[key] = validateCheckbox(CGUError);
+  });
+  const wrongInput = Object.entries(isValid).filter(([key, value]) => !value);
+  return !wrongInput.length;
 };
 
 firstName.addEventListener("focusout", function(){validateField(regexName, firstName, prenomError, 2)})
@@ -119,16 +172,12 @@ submit.addEventListener("click", function(){validateCheckbox(CGUError)})
 
 submit.addEventListener("click", function(e) {
   e.preventDefault();
-  if (
-    validateField(regexName, firstName, prenomError, 2) &&
-    validateField(regexName, lastName, nomError, 2) &&
-    validateField(regexMail, email, mailError) &&
-    validateField(regexDate, birthday, birthdayError) &&
-    validateField(regexNumber, quantityCity, quantityCityError) &&
-    validateRadio(locationError) &&
-    validateCheckbox(CGUError)
-  ) {
-    form.classList.add('success')
-    validation.classList.remove('success')
-  } 
+  const input = getInput();
+  const formIsValid = checkForm(input);
+  if (!formIsValid) {
+    return false
+  }
+  form.classList.add('success');
+  validation.classList.remove('success');
 })
+
